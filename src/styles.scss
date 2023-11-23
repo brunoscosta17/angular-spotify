@@ -1,0 +1,22 @@
+/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Noto+Sans:wght@400;700&display=swap');
+@import 'variables.scss';
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: $background;
+}
+
+* {
+  font-family: 'Montserrat', sans-serif;
+  box-sizing: border-box;
+}
+
+.flex {
+  display: flex;
+  &-center {
+    align-items: center;
+    justify-content: center;
+  }
+}
