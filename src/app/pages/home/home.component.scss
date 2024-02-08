@@ -1,0 +1,27 @@
+@import 'table.scss';
+@import 'variables.scss';
+
+:host {
+  display: flex;
+  justify-content: space-between;
+
+  .my-musics {
+    padding: 0 50px 20px;
+    width: 100%;
+    max-height: 100vh;
+    overflow-y: scroll;
+  }
+
+  .right-panel {
+    height: 100%;
+  }
+
+  ::-webkit-scrollbar {
+    width: 7px;
+    &-thumb {
+      background-color: rgba($color: $primary, $alpha: .3);
+      border-radius: 10px;
+    }
+  }
+
+}

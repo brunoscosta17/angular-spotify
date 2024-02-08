@@ -2,7 +2,11 @@ import { Injectable } from '@angular/core';
 import { SpotifyConfig } from 'src/environments/environment';
 import Spotify from 'spotify-web-api-js';
 import { IUser } from '../interfaces/IUser';
-import { SpotifyUserToUser } from '../commom/spotifyHelper';
+import { SpotifyArtistToArtist, SpotifyPlaylistToPlaylist, SpotifyTrackToSong, SpotifyUserToUser } from '../commom/spotifyHelper';
+import { IPlaylist } from '../interfaces/IPlaylist';
+import { Router } from '@angular/router';
+import { IArtist } from '../interfaces/IArtist';
+import { ISong } from '../interfaces/ISong';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +17,7 @@ export class SpotifyService {
 
   user!: IUser;
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   async startUser() {
     if (!!this.user) return true;
@@ -30,9 +34,27 @@ export class SpotifyService {
 
   async getSpotfyUser(): Promise<any> {
     const userInfo = await this.spotifyApi.getMe();
-    console.log('user', userInfo);
     this.user = SpotifyUserToUser(userInfo);
-    console.log('user', this.user);
+  }
+
+  async getPlaylists(offset = 0, limit = 50): Promise<IPlaylist[]> {
+    const playlists = await this.spotifyApi.getUserPlaylists(this.user?.id, { offset, limit});
+    return playlists.items.map(SpotifyPlaylistToPlaylist);
+  }
+
+  async getTopArtists(limit = 10): Promise<IArtist[]> {
+    const topArtists = await this.spotifyApi.getMyTopArtists({ limit });
+    return topArtists.items.map(SpotifyArtistToArtist);
+  }
+
+  async searchForSongs(offset = 0, limit = 50): Promise<ISong[]> {
+    const songs = await this.spotifyApi.getMySavedTracks({ offset, limit });
+    return songs.items.map(item => SpotifyTrackToSong(item.track));
+  }
+
+  async playSong(songId: string) {
+    await this.spotifyApi.queue(songId);
+    await this.spotifyApi.skipToNext();
   }
 
   getUrlLogin() {
@@ -55,6 +77,16 @@ export class SpotifyService {
   setAccessToken(token: string) {
     this.spotifyApi.setAccessToken(token);
     localStorage.setItem('token', token);
+  }
+
+  logout(offset = 0, limit = 50) {
+    localStorage.clear();
+    this.router.navigate(['/login']);
+  }
+
+  async getCurrentSong(): Promise<any>{
+    const song = await this.spotifyApi.getMyCurrentPlayingTrack();
+    if (song && song.item) return SpotifyTrackToSong(song.item);
   }
 
 }
