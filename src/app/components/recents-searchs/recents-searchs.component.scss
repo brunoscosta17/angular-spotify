@@ -1,0 +1,43 @@
+@import 'variables.scss';
+
+:host {
+
+  input {
+    width: 100%;
+    padding: 10px 5px;
+    border-radius: 8px;
+    border-color: $transparent-black-30;
+    outline: none;
+    color: $primary;
+    &::placeholder {
+      color: $transparent-black-50;
+      font-size: .85rem;
+    }
+    &:focus, &:active {
+      border-color: $primary;
+      border-width: 2px;
+    }
+  }
+
+  .suggestions {
+    flex-wrap: wrap;
+
+    span {
+      font-size: .7rem;
+      background-color: $white;
+      margin-left: 5px;
+      padding: 5px 10px;
+      color: $transparent-black-70;
+      border: 1px solid $transparent-black-30;
+      margin-top: 10px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all .3s;
+      &:hover {
+        background-color: rgba($primary, .8);
+        color: $white;
+      }
+    }
+  }
+
+}

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { newArtist } from 'src/app/commom/factories';
 import { IArtist } from 'src/app/interfaces/IArtist';
 import { SpotifyService } from 'src/app/services/spotify.service';
 
@@ -10,19 +9,17 @@ import { SpotifyService } from 'src/app/services/spotify.service';
 })
 export class TopArtistsComponent implements OnInit {
 
-  topArtist: IArtist = newArtist();
+  artists: IArtist[] = [];
 
   constructor(private spotifyService: SpotifyService) { }
 
   ngOnInit(): void {
-    this.getArtist();
+    this.getTopArtists();
   }
 
-  async getArtist() {
-    const artist = await this.spotifyService.getTopArtists(1);
-    if (!!artist) {
-      this.topArtist = artist.pop() as IArtist;
-    }
+  async getTopArtists() {
+    this.artists = await this.spotifyService.getTopArtists();
+    this.artists.length > 0 ? console.log(this.artists) : console.log('No artists');
   }
 
 }

@@ -42,7 +42,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getCurrentSong(): void {
-    const subscription = this.playerService.currentSong.subscribe(song => { console.log(song); this.currentSong = song});
+    const subscription = this.playerService.currentSong.subscribe(song => this.currentSong = song);
     this.subscription.push(subscription);
   }
 
