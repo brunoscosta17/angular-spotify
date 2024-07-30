@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { SpotifyConfig } from 'src/environments/environment';
 import Spotify from 'spotify-web-api-js';
 import { IUser } from '../interfaces/IUser';
-import { SpotifyArtistToArtist, SpotifyPlaylistToPlaylist, SpotifyTrackToSong, SpotifyUserToUser } from '../commom/spotifyHelper';
+import { SpotifyArtistToArtist, SpotifyPlaylistToPlaylist, SpotifySinglePlaylistToPlaylist, SpotifyTrackToSong, SpotifyUserToUser } from '../commom/spotifyHelper';
 import { IPlaylist } from '../interfaces/IPlaylist';
 import { Router } from '@angular/router';
 import { IArtist } from '../interfaces/IArtist';
@@ -37,9 +37,17 @@ export class SpotifyService {
     this.user = SpotifyUserToUser(userInfo);
   }
 
-  async getPlaylists(offset = 0, limit = 50): Promise<IPlaylist[]> {
+  async getUserPlaylists(offset = 0, limit = 50): Promise<IPlaylist[]> {
     const playlists = await this.spotifyApi.getUserPlaylists(this.user?.id, { offset, limit});
     return playlists.items.map(SpotifyPlaylistToPlaylist);
+  }
+
+  async getPlaylistSongs(playlistId: string, offset: number = 0, limit: number = 50): Promise<IPlaylist> {
+    const playlistSpotify = await this.spotifyApi.getPlaylist(playlistId);
+    const playlist = SpotifySinglePlaylistToPlaylist(playlistSpotify);
+    const songs = this.spotifyApi.getPlaylistTracks(playlistId, { offset, limit });
+    playlist.songs = (await songs).items.map(item => SpotifyTrackToSong(item.track as SpotifyApi.TrackObjectFull));
+    return playlist;
   }
 
   async getTopArtists(limit = 10): Promise<IArtist[]> {
@@ -70,7 +78,6 @@ export class SpotifyService {
     if (!window.location.hash)
       return;
     const params = window.location.hash.substr(1).split('&');
-    console.log(params);
     return params[0].split('=')[1];
   }
 
@@ -87,6 +94,14 @@ export class SpotifyService {
   async getCurrentSong(): Promise<any>{
     const song = await this.spotifyApi.getMyCurrentPlayingTrack();
     if (song && song.item) return SpotifyTrackToSong(song.item);
+  }
+
+  async skipToPreviousSong() {
+    await this.spotifyApi.skipToPrevious();
+  }
+
+  async skipToNextSong() {
+    await this.spotifyApi.skipToNext();
   }
 
 }

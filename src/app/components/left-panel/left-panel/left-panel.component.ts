@@ -29,13 +29,17 @@ export class LeftPanelComponent implements OnInit {
   }
 
   onClick(menuItem: string): void {
-    console.log(menuItem);
     this.menuItemActive = menuItem;
     this.router.navigate([`/player/${menuItem}`]);
   }
 
+  goToPlaylist(playlistId: string): void {
+    this.menuItemActive = 'playlist';
+    this.router.navigate([`/player/list/playlist/${playlistId}`]);
+  }
+
   async getPlaylists(): Promise<void> {
-    this.playlists = await this.spotfyService.getPlaylists();
+    this.playlists = await this.spotfyService.getUserPlaylists();
   }
 
 }

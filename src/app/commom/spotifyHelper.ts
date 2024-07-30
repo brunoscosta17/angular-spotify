@@ -3,7 +3,7 @@ import { IArtist } from "../interfaces/IArtist";
 import { IPlaylist } from "../interfaces/IPlaylist";
 import { ISong } from "../interfaces/ISong";
 import { IUser } from "../interfaces/IUser";
-import { newSong } from "./factories";
+import { newPlaylist, newSong } from "./factories";
 
 export function SpotifyUserToUser(user: SpotifyApi.CurrentUsersProfileResponse): IUser {
   return {
@@ -18,6 +18,16 @@ export function SpotifyPlaylistToPlaylist(playlist: SpotifyApi.PlaylistObjectSim
     id: playlist.id,
     name: playlist.name,
     imageUrl: playlist.images?.pop()?.url!
+  }
+}
+
+export function SpotifySinglePlaylistToPlaylist(playlist: SpotifyApi.SinglePlaylistResponse): IPlaylist {
+  if(!playlist) return newPlaylist();
+  return {
+    id: playlist.id,
+    name: playlist.name,
+    imageUrl: playlist.images?.shift()?.url!,
+    songs: []
   }
 }
 

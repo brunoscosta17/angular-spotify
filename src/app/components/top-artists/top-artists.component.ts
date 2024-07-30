@@ -19,7 +19,6 @@ export class TopArtistsComponent implements OnInit {
 
   async getTopArtists() {
     this.artists = await this.spotifyService.getTopArtists();
-    this.artists.length > 0 ? console.log(this.artists) : console.log('No artists');
   }
 
 }

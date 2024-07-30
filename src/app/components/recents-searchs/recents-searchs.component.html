@@ -1,4 +1,4 @@
 <input type="text" placeholder="Artists, Musics, Playlists" [(ngModel)]="searchField" (keyup.Enter)="search()">
 <div class="suggestions flex">
-  <span *ngFor="let item of recentsSearchs" (click)="setSearchField(item)">{{ item }}</span>
+  <span *ngFor="let item of recentsSearchs" (click)="setSearchField(item)" [class.selected]="item === selectedItem">{{ item }}</span>
 </div>

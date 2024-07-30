@@ -37,6 +37,10 @@
         background-color: rgba($primary, .8);
         color: $white;
       }
+      &.selected {
+        background-color: rgba($primary, .8);
+        color: $white;
+      }
     }
   }
 

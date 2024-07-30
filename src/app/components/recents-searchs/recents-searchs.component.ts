@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RecentsSearchsComponent implements OnInit {
 
-  searchField = 'Bruno';
+  searchField = '';
   recentsSearchs = [
     'Top Global',
     'Country Music',
@@ -16,6 +16,7 @@ export class RecentsSearchsComponent implements OnInit {
     'Blues',
     'Jazz'
   ];
+  selectedItem: string = '';
 
   constructor() { }
 
@@ -24,6 +25,8 @@ export class RecentsSearchsComponent implements OnInit {
 
   setSearchField(value: string): void {
     this.searchField = value;
+    this.selectedItem = value;
+
   }
 
   search(): void {
